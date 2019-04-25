@@ -9,7 +9,7 @@
 
 ---
 
-This lab is compatible with ICP version 3.1.2
+This lab is compatible with ICP version 2.1.0.3
 
 ![image-20181130211541303](images/image-20181130211541303.png)
 
@@ -70,9 +70,7 @@ In this lab, all nodes will be part of a single VM.
 
 ## TASK 1 : Check your ICP installation
 
-Using Terraform ( see [https://developer.ibm.com/recipes/tutorials/infrastructure-automation-with-terraform-on-ibm-cloud-iaas/](https://developer.ibm.com/recipes/tutorials/infrastructure-automation-with-terraform-on-ibm-cloud-iaas/) ), we instantiated for you a **virtual server** (16CPU - 32GB RAM - 400GB Disk - 1GB Network speed - Ubuntu 16.04.5 LTS) on IBM Cloud infrastructure (IaaS).
-
-We already have installed **ICP 3.1.2** on it. If you want to have more information on the ICP installation, have a look at : [https://github.com/phthom/icp31/blob/master/1-Installation.md](https://github.com/phthom/icp31/blob/master/1-Installation.md)
+We already have installed **ICP 2.1.0.3**. 
 
 You will need **ssh** (or **putty**  ( https://www.putty.org/ )) to access this VM using the **IP address and the root password** the instructors gave you.
 
@@ -80,9 +78,9 @@ From your web browser, go the following address where *ipaddress* is the IP your
 
 `https://ipaddress:8443`  
 
-**Userid** : admin
+**Userid** : userX
 
-**Password** : admin1!
+**Password** : <provided by instructor>
 
 ![Loginicp](images/loginicp.png)
 
@@ -102,47 +100,9 @@ You can look at the (helm) catalog and visit some entries (but don't create any 
 
 We now need to configure kubectl to get access to the cluster. An alternative method can be used (see Appendix A : How to get connected to the cluster) if you are interested.
 
-On the provided virtual server, we are using a **script** created for you to help to connect to the cluster
+After successful login click on the account icon (top right corner) and select **Configure client**
 
-Run : 
-
-`cat ~/connect2icp.sh`
-
-and look at the following code :
-
-```console
-CLUSTERNAME=mycluster
-ACCESS_IP=`curl ifconfig.co`
-USERNAME=admin
-PASSWD=admin1!
-
-token=$(curl -s -k -H "Content-Type: application/x-www-form-urlencoded;charset=UTF-8" -d "grant_type=password&username=$USERNAME&password=$PASSWD&scope=openid" https://$ACCESS_IP:8443/idprovider/v1/auth/identitytoken --insecure | jq .id_token | awk  -F '"' '{print $2}')
-
-kubectl config set-cluster $CLUSTERNAME.icp --server=https://$ACCESS_IP:8001 --insecure-skip-tls-verify=true
-kubectl config set-context $CLUSTERNAME.icp-context --cluster=$CLUSTERNAME.icp
-kubectl config set-credentials admin --token=$token
-kubectl config set-context $CLUSTERNAME.icp-context --user=admin --namespace=default
-kubectl config use-context $CLUSTERNAME.icp-context
-```
-
-> These lines in that script are getting a token automatically for you. But every 12 hours, the token expires and you will need to type that script (connect2icp.sh) again. 
-
-Then execute that shell program :
-
-`~/connect2icp.sh`
-
-Results :
-
-```console
-# ~/connect2icp.sh
-Cluster "cluster.local" set.
-Context "cluster.local-context" modified.
-User "admin" set.
-Context "cluster.local-context" modified.
-Switched to context "cluster.local-context".
-```
-
-As a result, you will see that you are now **connected** for **12 hours** to the cluster (with only one node):
+Copy the content of the window and paste into terminal windows on your workstation. When all commands which set the context for kubectl command are run you should be able to run following command:
 
 `kubectl version --short`
 
@@ -154,7 +114,7 @@ Client Version: v1.12.3
 Server Version: v1.12.3+icp
 ```
 
-Try this command to show all the worker nodes :
+Try this command to show all the worker nodes : (success depends on the assigned user rights)
 
 `kubectl get nodes`
 
@@ -163,95 +123,87 @@ Results :
 ```console
 # kubectl get nodes
 NAME            STATUS    ROLES     AGE       VERSION
-169.50.200.70   Ready     etcd,management,master,proxy,worker   35m       v1.12.3+icp
+169.50.200.70   Ready     <>.       35m       v1.12.3+icp
 ```
-
-> After a long period of inactivity, if you see some connection error when typing a kubectl command then re-execute the `~/connect2icp.sh` command.
 
 To get help from the kubectl, just type this command:
 
 `kubectl`
 
-### ICP Command line tool : cloudctl
+### ICP Command line tool : cloudctl (aka bx)
 
-This command can be used to configure and manage IBM Cloud Private. We have also installed the **cloudctl** command on the virtual server you will use.
+To configure and manage IBM Cloud Private you need a IBM Cloud Private CLI. Follow the instructions on page https://www.ibm.com/support/knowledgecenter/en/SSBS6K_2.1.0.3/manage_cluster/install_cli.html 
 
-If you need to install cloudctl, type the following curl command : (don't forget to change the ipaddress):
 
-`curl -kLo cloudctl-linux-amd64-3.1.2-1203 https://ipaddress:8443/api/cli/cloudctl-linux-amd64`
+Execute the **bx pr** command for the first time 
 
-Results:
-
-```console 
-curl -kLo cloudctl-linux-amd64-3.1.0-715 https://169.50.200.70:8443/api/cli/cloudctl-linux-amd64
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100 13.9M  100 13.9M    0     0  38.4M      0 --:--:-- --:--:-- --:--:-- 38.4M
-
-```
-
-Now execute the following commands to change cloudctl to executable and to move that CLI to the right directory :
-
-```
-chmod 755 /root/cloudctl-linux-amd64-3.1.2-1203
-mv /root/cloudctl-linux-amd64-3.1.2-1203 /usr/local/bin/cloudctl
-```
-
-Execute the **cloudctl** command for the first time 
-
-`cloudctl`
+`bx pr`
 
 Results:
 
 ```console 
-# cloudctl
+# bx pr
 NAME:
-   cloudctl - A command line tool to interact with IBM Cloud Private
-
+   bx pr - IBM Cloud Private Service.
 USAGE:
-[environment variables] cloudctl [global options] command [arguments...] [command options]
-
-VERSION:
-   3.1.0-715+e4d4ee1d28cc2a588dabc0f54067841ad6c36ec9
+   bx pr command [arguments...] [command options]
 
 COMMANDS:
-   api       View the API endpoint and API version for the service.
-   catalog   Manage catalog
-   cm        Manage cluster
-   config    Write default values to the config
-   iam       Manage identities and access to resources
-   login     Log user in.
-   logout    Log user out.
-   plugin    Manage plugins
-   pm        Manage passwords
-   target    Set or view the targeted namespace
-   tokens    Display the oauth tokens for the current session. Run cloudctl login to retrieve the tokens.
-   version   Check cli and api version compatibility
-   help      
+   api                          View the API endpoint and API version for the service.
+   certificate-delete           Delete a user certificate.
+   certificates                 List user certificates.
+   cluster-config               Download the Kubernetes configuration and configure kubectl for a specified cluster.
+   cluster-get                  View details for a cluster.
+   clusters                     List all the clusters in your account.
+   credentials-set              Set the infrastructure account credentials for the OpenStack or VMware cloud provider
+   credentials-set-openstack    Set the infrastructure account credentials for the OpenStack cloud provider.
+   credentials-set-vmware       Set the infrastructure account credentials for the VMware cloud provider.
+   credentials-unset            Remove cloud provider credentials. After you remove the credentials, you cannot access the cloud provider.
+   delete-helm-chart            Deletes a Helm chart from the IBM Cloud Private internal registry.
+   iam                          Group of commands to manage identities and access to resources.
+   init                         Initialize the IBM Cloud Private plugin with the API endpoint.
+   load-helm-chart              Loads a Helm chart archive to an IBM Cloud Private cluster.
+   load-images                  Loads Docker images in to an IBM Cloud Private internal Docker registry.
+   load-ppa-archive             Load Docker images and Helm charts compressed file that you downloaded from Passport Advantage.
+   locations                    List available locations.
+   login                        Log user in.
+   logout                       Log user out.
+   machine-type-add             Add a machine type. A machine type determines the number of CPUs, the amount of memory, and disk space that is available to the node.
+   machine-type-add-openstack   Add an openstack machine type. A machine type determines the number of CPUs, the amount of memory, and disk space that is available to the node.
+   machine-type-add-vmware      Add a vmware machine type. A machine type determines the number of CPUs, the amount of memory, and disk space that is available to the node.
+   machine-types                List available machine types for a location. A machine type determines the number of CPUs, the amount of memory, and disk space that is available to the master/worker node.
+   master-get                   View the details about a master node.
+   masters                      List all master nodes in an existing cluster.
+   password-rule-rm             Remove a password rule for a cluster namespace.
+   password-rule-set            Set a password rule for a cluster namespace.
+   password-rules               List the password rules for a cluster namespace.
+   proxies                      List all proxy nodes in an existing cluster.
+   proxy-add                    Add a proxy node to a cluster.
+   proxy-get                    View the details about a proxy node.
+   proxy-rm                     Remove proxy nodes from an existing cluster.
+   registry-init                Initialize cluster image registry.
+   target                       Set or view the targeted namespace.
+   tokens                       Display the oauth tokens for the current session. Run bx pr login to retrieve the tokens.
+   update-secret                Update a secret and restart deployments that use the secret.
+   worker-add                   Add a worker node to a cluster.
+   worker-get                   View the details about a worker node.
+   worker-rm                    Remove worker nodes from an existing cluster.
+   workers                      List all worker nodes in an existing cluster.
+   help, h                      Show help
    
-Enter 'cloudctl help [command]' for more information about a command.
-
-ENVIRONMENT VARIABLES:
-   CLOUDCTL_COLOR=false                     Do not colorize output
-   CLOUDCTL_HOME=path/to/dir                Path to config directory
-   CLOUDCTL_TRACE=true                      Print API request diagnostics to stdout
-   CLOUDCTL_TRACE=path/to/trace.log         Append API request diagnostics to a log file
-
-GLOBAL OPTIONS:
-   --help, -h                         Show help
-
+Enter 'bx pr help [command]' for more information about a command.
 ```
 
 
 
-Before using the **cloudctl** with the master, you must login to the master:
+Before using the **bx pr** with the master, you must login to the master:
 
-`cloudctl login -a https://mycluster.icp:8443 --skip-ssl-validation`
+`bx pr login -a https://mycluster.icp:8443 --skip-ssl-validation`
 
-> For the login : admin/admin1!
+> For the login use credentials provided by instructor
 
 ```console
-# cloudctl login -a https://mycluster.icp:8443 --skip-ssl-validation
+# bx pr login -a https://mycluster.icp:8443 --skip-ssl-validation
 
 Username> admin
 
@@ -290,11 +242,11 @@ OK
 
 ```
 
-With that **cloudctl cm** CLI, you can manage the infrastructure part of the cluster like adding new worker nodes (machine-type-add, worker-add) and so on.
+With that **bx pr cm** CLI, you can manage the infrastructure part of the cluster like adding new worker nodes (machine-type-add, worker-add) and so on.
 
 Then you can type some commands concerning your cluster:
 
-`cloudctl cm masters mycluster`
+`bx pr cm masters mycluster`
 
 Results
 
@@ -304,7 +256,7 @@ ID             Private IP      Machine Type   State
 mycluster-m1   169.50.200.70   -              deployed 
 ```
 
-Among all sub-commands in **cloudctl**, there are some commands to manage the infrastructure components like :
+Among all sub-commands in **bx pr**, there are some commands to manage the infrastructure components like :
 
 - cluster
 - workers (adding, removing ...)
@@ -317,11 +269,9 @@ Among all sub-commands in **cloudctl**, there are some commands to manage the in
 
 Test your connectivity to the cluster with this command:
 
- `kubectl get nodes`
+ `kubectl get pods`
 
-If you get an **error**, execute the following script that we created in the installation lab :
 
-`~/connect2icp.sh`
 
 
 ### 2. Download a GIT repo
@@ -450,7 +400,7 @@ Open a browser to https://ipaddress:8443.
 
 Change the *ipaddress* depending on you hosts file. Create a security exception in your browser for this location and if necessary, click on the `Advanced` link and follow the prompts. Log in as user `admin` with password `admin1!`. 
 
-View your image using `Menu > Container Images`
+View your image using `Menu > Manage > Images`
 
 ![image list](images/imagelist.png)
 
@@ -524,7 +474,13 @@ From that output, write down the nodePort (i.e. 30330 in that case).
 Open a web browser window and go to the URL of your master node with your NodePort number, such as `http://ipaddress:30330`. Your output should look like this.
 
  ![image-20181130164615038](images/image-20181130164615038.png)
+ 
+ This may not work due to firewall settings, so alternatively you may use curl command after logging to any cluster node.
 
+```
+#curl localhost:31989
+Hello world from hello-world-deployment-5b48b4dd58-v9qbj! Your app is up and running in a cluster!
+```
 
 ### 11. Application troubleshooting 
 
@@ -962,7 +918,7 @@ spec:
 
   ![1553682422885](images/1553682422885.png)
 
-- click on **Launch** link to check the application has been successfully deployed
+- click on **Launch** link to check the application has been successfully deployed (or use curl instead if firewall blocks the direct traffic)
 
 ![1553682535675](images/1553682535675.png)
 
@@ -984,11 +940,7 @@ Now that you have understood the structure of a kubernetes manifest file, you ca
 
 ### 1. Check Helm
 
-First retreive kubernetes configuration for ICP : 
-
-`~/connect2icp.sh`
-
-Then check helm version : 
+Check helm version : 
 
 `helm version --tls`
 
@@ -1066,12 +1018,12 @@ Another important step is to access to the ICP container registry.
 
 To do so,  login to the private registry:
 
-`docker login mycluster.icp:8500 -u admin -p admin1!`
+`docker login mycluster.icp:8500 -u <user> -p <password>
 
 Results:
 
 ```console
-# docker login mycluster.icp:8500 -u admin -p admin1!
+# docker login mycluster.icp:8500 -u <user> -p <password>
 WARNING! Using --password via the CLI is insecure. Use --password-stdin.
 Login Succeeded
 ```
@@ -1171,7 +1123,7 @@ affinity: {}
 
 Review deployment template:
 
-`nano /root/hellonginx/templates/deployment.yaml`
+`more /root/hellonginx/templates/deployment.yaml`
 
 **Don't change anything.**
 
@@ -1484,7 +1436,7 @@ OK
 ```
 
 
-Leave the terminal and login to the ICP console with admin/admin :
+Leave the terminal and login to the ICP console :
 
 - Select **Catalog** on the top right side of the ICP console
 
