@@ -1,5 +1,8 @@
 <img src="https://kubernetes.io/images/favicon.png" width="200">
-# IBM Cloud Container Service lab
+
+# IBM Cloud Container Workshop
+
+version 1.0
 
 # An introduction to containers
 
@@ -11,9 +14,9 @@ Watch this [video](https://www.youtube.com/watch?v=wlBhtc31I8c) to learn about p
 
 # Objectives
 
-This lab is an introduction to using Docker containers on Kubernetes in the IBM Cloud Container Service. By the end of the course, you'll achieve these objectives:
+This lab is an introduction to using Docker containers on Kubernetes in the IBM Cloud Private. By the end of the course, you'll achieve these objectives:
 * Understand core concepts of Kubernetes
-* Build a Docker image and deploy an application on Kubernetes in the IBM Cloud Container Service
+* Build a Docker image and deploy an application on Kubernetes in the IBM Cloud Private
 * Control application deployments, while minimizing your time with infrastructure management
 * Add AI services to extend your app
 * Secure and monitor your cluster and app
@@ -149,7 +152,7 @@ Kubernetes provides us with a client interface through ‘kubectl’. Kubectl co
 
 # Lab information
 
-IBM Cloud provides the capability to run applications in containers on Kubernetes. The IBM Cloud Container Service runs Kubernetes clusters which deliver the following:
+IBM Cloud provides the capability to run applications in containers on Kubernetes. The IBM Cloud Private runs Kubernetes clusters which deliver the following:
 
 * Powerful tools
 * Intuitive user experience
@@ -164,30 +167,22 @@ IBM Cloud provides the capability to run applications in containers on Kubernete
 
 [Lab 1](https://github.com/IBM/container-service-getting-started-wt/tree/master/Lab%201): This lab walks through creating and deploying a simple "hello world" app in Node.JS, then accessing that app.
 
-[Lab 2](https://github.com/IBM/container-service-getting-started-wt/tree/master/Lab%202): Builds on lab 1 to expand to a more resilient setup which can survive having containers fail and recover. Lab 2 will also walk through basic services you need to get started with Kubernetes and the IBM Cloud Container Service
+[Lab 2](https://github.com/IBM/container-service-getting-started-wt/tree/master/Lab%202): Builds on lab 1 to expand to a more resilient setup which can survive having containers fail and recover. Lab 2 will also walk through basic services you need to get started with Kubernetes and the IBM Cloud Private
 
-[Lab 3](https://github.com/IBM/container-service-getting-started-wt/tree/master/Lab%203): This lab covers adding external services to a cluster. It walks through adding integration to a Watson service, and discusses storing credentials of external services to the cluster.
+[Lab 3] Not yet ready(https://github.com/IBM/container-service-getting-started-wt/tree/master/Lab%205): This lab walks through securing your cluster and applications using network policies, and will later add leveraging tools like Vulnerability Advisor to secure images and manage security in your image registry.
 
-[Lab 4](https://github.com/IBM/container-service-getting-started-wt/tree/master/Lab%204) (Under Construction, Paid Only, Optional): This lab will outline how to create a highly available application, and build on the knowledge you have learned in Labs 1 - 3 to deploy clusters simultaneously to multiple availability zones. As this requires a paid IBM Cloud account, skip this lab if you are sticking to the free tier.
-
-[Lab 5](https://github.com/IBM/container-service-getting-started-wt/tree/master/Lab%205): This lab walks through securing your cluster and applications using network policies, and will later add leveraging tools like Vulnerability Advisor to secure images and manage security in your image registry.
-
-# IBM Cloud Container Workshop
-
-version 1.0
 
 ## Agenda
-**Day One**
 + Introduction / IBM Cloud
 + _Docker Overview and **Lab**_
-  + [https://github.com/Azzoz06/ContainerWkshp/blob/master/1-PrepareLab.md](https://github.com/Azzoz06/ContainerWkshp/blob/master/1-PrepareLab.md)
-  + [https://github.com/Azzoz06/ContainerWkshp/blob/master/2-DockerLab.md](https://github.com/Azzoz06/ContainerWkshp/blob/master/2-DockerLab.md)
+  + [https://github.com/dymaczew/ContainerWkshp/blob/master/1-PrepareLab.md](https://github.com/dymaczew/ContainerWkshp/blob/master/1-PrepareLab.md)
+  + [https://github.com/dymaczew/ContainerWkshp/blob/master/2-DockerLab.md](https://github.com/dymaczew/ContainerWkshp/blob/master/2-DockerLab.md)
 + Kubernetes overview
 + Positioning and Offerings
     + ICp / Icp Hosted / IKS / CAC (MultiCloud)
 + IBM Cloud (Public) Container Service
 + _Kubernetes **Lab** on IKS_
-  + [https://github.com/Azzoz06/ContainerWkshp/blob/master/3-KubernetesLabOnIKS.md](https://github.com/Azzoz06/ContainerWkshp/blob/master/3-KubernetesLabOnIKS.md)
+  + [https://github.com/dymaczew/ContainerWkshp/blob/master/3-KubernetesLabOnIKS.md](https://github.com/dymaczew/ContainerWkshp/blob/master/3-KubernetesLabOnIKS.md)
 + IBM Cloud Private Overview
   +   _Demo_
 + Wrap Up
@@ -196,9 +191,9 @@ version 1.0
 + Helm overview
   + _Kubernetes & Helm **Lab** on ICP_
 
-  + [https://github.com/Azzoz06/ContainerWkshp/blob/master/4-KubernetesHelmOnICP.md](https://github.com/Azzoz06/ContainerWkshp/blob/master/4-KubernetesHelmOnICP.md)
+  + [https://github.com/dymaczew/ContainerWkshp/blob/master/4-KubernetesHelmOnICP.md](https://github.com/dymaczew/ContainerWkshp/blob/master/4-KubernetesHelmOnICP.md)
 
-  + <https://github.com/Azzoz06/ContainerWkshp/blob/master/5-HybridCloudLab.md>
+  + <https://github.com/dymaczew/ContainerWkshp/blob/master/5-HybridCloudLab.md>
 
     
 + Application Patterns
@@ -207,9 +202,9 @@ version 1.0
   + Devops : CI/CD
 + _DevOps **Lab**_
   + _Jenkins/Microclimate **Labs**_
-  + [https://github.com/Azzoz06/ContainerWkshp/blob/master/6-Microclimate%20and%20Jenkins%20Lab.md](https://github.com/Azzoz06/ContainerWkshp/blob/master/6-Microclimate%20and%20Jenkins%20Lab.md)
+  + [https://github.com/dymaczew/ContainerWkshp/blob/master/6-Microclimate%20and%20Jenkins%20Lab.md](https://github.com/dymaczew/ContainerWkshp/blob/master/6-Microclimate%20and%20Jenkins%20Lab.md)
   + _Optional : IBM Cloud Toolchain / Pipeline **Demo**_
-  + [https://github.com/Azzoz06/ContainerWkshp/blob/master/7-Toolchain%20Lab.md](https://github.com/Azzoz06/ContainerWkshp/blob/master/7-Toolchain%20Lab.md)
+  + [https://github.com/dymaczew/ContainerWkshp/blob/master/7-Toolchain%20Lab.md](https://github.com/dymaczew/ContainerWkshp/blob/master/7-Toolchain%20Lab.md)
 + Monitoring
 
   + _**Demos** Prometheus / Grafana_
