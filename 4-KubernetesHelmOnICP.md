@@ -398,7 +398,7 @@ latest: digest: sha256:019a5da27d6ed2a58fab45669707daf89932da7c2bc13072c41ed4fb3
 
 Open a browser to https://ipaddress:8443. 
 
-Change the *ipaddress* depending on you hosts file. Create a security exception in your browser for this location and if necessary, click on the `Advanced` link and follow the prompts. Log in as user `admin` with password `admin1!`. 
+Change the *ipaddress* depending on you hosts file. Create a security exception in your browser for this location and if necessary, click on the `Advanced` link and follow the prompts.  
 
 View your image using `Menu > Manage > Images`
 
@@ -738,7 +738,7 @@ Perform a curl `http://ipaddress:<nodeport>` to confirm your new code is active 
 
 Move to the Lab 2 directory:
 
-`cd "/root/container-service-getting-started-wt/Lab 2"`
+`cd "../Lab\ 2"`
 
 
 Then build the container:		
