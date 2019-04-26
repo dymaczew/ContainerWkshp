@@ -18,11 +18,8 @@ This lab is an introduction to using Docker containers on Kubernetes in the IBM 
 * Understand core concepts of Kubernetes
 * Build a Docker image and deploy an application on Kubernetes in the IBM Cloud Private
 * Control application deployments, while minimizing your time with infrastructure management
-* Add AI services to extend your app
 * Secure and monitor your cluster and app
 
-# Prerequisites
-* A Pay-As-You-Go or Subscription [IBM Cloud account](https://cloud.ibm.com/registration/)
 
 # Virtual machines
 
@@ -51,14 +48,6 @@ Traditional applications are run on native hardware. A single application does n
 
 Containers allow you to share the host OS. This reduces duplication while still providing the isolation. Containers also allow you to drop unneeded files such as system libraries and binaries to save space and reduce your attack surface. If SSHD or LIBC are not installed, they cannot be exploited.
 
-# Get set up
-
-Before we dive into Kubernetes, you need to provision a cluster for your containerized app. Then you won't have to wait for it to be ready for the subsequent labs.
-
-1. You must install the CLIs per https://cloud.ibm.com/docs/containers/cs_cli_install.html. If you do not yet have these CLIs and the Kubernetes CLI, do [lab 0](https://github.com/IBM/container-service-getting-started-wt/tree/master/Lab%200) before starting the course.
-2. If you haven't already, provision a cluster. This can take a few minutes, so let it start first: `bx cs cluster-create --name <name-of-cluster>`
-3. After creation, before using the cluster, make sure it has completed provisioning and is ready for use. Run `bx cs clusters` and make sure that your cluster is in state "deployed".
-4. Then use `bx cs workers <name-of-cluster>` and make sure that all worker nodes are in state "normal" with Status "Ready".
 
 # Kubernetes and containers: an overview
 
@@ -157,23 +146,25 @@ IBM Cloud provides the capability to run applications in containers on Kubernete
 * Powerful tools
 * Intuitive user experience
 * Built-in security and isolation to enable rapid delivery of secure applications
-* Cloud services including cognitive capabilities from Watson
+* Cloud services including cognitive capabilities from Watson (licensed content installed on top of IBM Cloud Private)
 * Capability to manage dedicated cluster resources for both stateless applications and stateful workloads
 
 
 #  Lab overview
 
-[Lab 0](https://github.com/IBM/container-service-getting-started-wt/tree/master/Lab%200) (Optional): Provides a walkthrough for installing IBM Cloud command-line tools and the Kubernetes CLI. You can skip this lab if you have the IBM Cloud CLI, the container-service plugin, the containers-registry plugin, and the kubectl CLI already installed on your machine.
 
-[Lab 1](https://github.com/IBM/container-service-getting-started-wt/tree/master/Lab%201): This lab walks through creating and deploying a simple "hello world" app in Node.JS, then accessing that app.
+[Lab 1](https://github.com/dymaczew/ContainerWkshp/tree/master/Lab%201): This lab walks through creating and deploying a simple "hello world" app in Node.JS, then accessing that app.
 
-[Lab 2](https://github.com/IBM/container-service-getting-started-wt/tree/master/Lab%202): Builds on lab 1 to expand to a more resilient setup which can survive having containers fail and recover. Lab 2 will also walk through basic services you need to get started with Kubernetes and the IBM Cloud Private
+[Lab 2](https://github.com/dymaczew/ContainerWkshp/tree/master/Lab%202): Builds on lab 1 to expand to a more resilient setup which can survive having containers fail and recover. Lab 2 will also walk through basic services you need to get started with Kubernetes and the IBM Cloud Private
 
-[Lab 3] Not yet ready(https://github.com/IBM/container-service-getting-started-wt/tree/master/Lab%205): This lab walks through securing your cluster and applications using network policies, and will later add leveraging tools like Vulnerability Advisor to secure images and manage security in your image registry.
+[Lab 3] Not yet ready(https://github.com/dymaczew/ContainerWkshp/tree/master/Lab%205): This lab walks through securing your cluster and applications using network policies, and will later add leveraging tools like Vulnerability Advisor to secure images and manage security in your image registry.
 
 
 ## Agenda
 + Introduction / IBM Cloud
+
+[Lab 0](https://github.com/dymaczew/ContainerWkshp/tree/master/Lab%200) (Optional): Provides a walkthrough for installing IBM Cloud command-line tools and the Kubernetes CLI. You can skip this lab if you have the IBM Cloud CLI, the container-service plugin, the containers-registry plugin, and the kubectl CLI already installed on your machine.
+
 + _Docker Overview and **Lab**_
   + [https://github.com/dymaczew/ContainerWkshp/blob/master/1-PrepareLab.md](https://github.com/dymaczew/ContainerWkshp/blob/master/1-PrepareLab.md)
   + [https://github.com/dymaczew/ContainerWkshp/blob/master/2-DockerLab.md](https://github.com/dymaczew/ContainerWkshp/blob/master/2-DockerLab.md)
