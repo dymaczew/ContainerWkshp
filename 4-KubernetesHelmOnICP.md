@@ -72,7 +72,6 @@ In this lab, all nodes will be part of a single VM.
 
 We already have installed **ICP 2.1.0.3**. 
 
-You will need **ssh** (or **putty**  ( https://www.putty.org/ )) to access this VM using the **IP address and the root password** the instructors gave you.
 
 From your web browser, go the following address where *ipaddress* is the IP your instructor gave you :
 
@@ -80,7 +79,7 @@ From your web browser, go the following address where *ipaddress* is the IP your
 
 **Userid** : userX
 
-**Password** : <provided by instructor>
+**Password** : < provided by instructor >
 
 ![Loginicp](images/loginicp.png)
 
@@ -110,8 +109,8 @@ Results :
 
 ```console
 # kubectl version --short
-Client Version: v1.12.3
-Server Version: v1.12.3+icp
+Client Version: v1.14.1
+Server Version: v1.10.0+icp-ee
 ```
 
 Try this command to show all the worker nodes : (success depends on the assigned user rights)
@@ -242,16 +241,16 @@ OK
 
 ```
 
-With that **bx pr cm** CLI, you can manage the infrastructure part of the cluster like adding new worker nodes (machine-type-add, worker-add) and so on.
+With that **bx pr ** CLI, you can manage the infrastructure part of the cluster like adding new worker nodes (machine-type-add, worker-add) and so on.
 
 Then you can type some commands concerning your cluster:
 
-`bx pr cm masters mycluster`
+`bx pr masters mycluster`
 
 Results
 
 ```console
-# cloudctl cm masters mycluster
+# bx pr masters mycluster
 ID             Private IP      Machine Type   State   
 mycluster-m1   169.50.200.70   -              deployed 
 ```
@@ -278,7 +277,6 @@ Test your connectivity to the cluster with this command:
 
 Download the samples using Git :
 
-`cd`
 
 `git clone https://github.com/IBM/container-service-getting-started-wt.git`
 ​	
@@ -373,7 +371,7 @@ To see the image, use the command:
 
 ### 5. Push the image to the registry
 
-Log in as user `admin` with password `admin1!`.
+Log in as user `admin` .
 
 `docker login mycluster.icp:8500`
 
