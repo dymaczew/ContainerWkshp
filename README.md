@@ -146,43 +146,30 @@ IBM Cloud provides the capability to run applications in containers on Kubernete
 * Powerful tools
 * Intuitive user experience
 * Built-in security and isolation to enable rapid delivery of secure applications
-* Cloud services including cognitive capabilities from Watson (licensed content installed on top of IBM Cloud Private)
+* Cloud services including cognitive capabilities from Watson (free and licensed content installed on top of IBM Cloud Private)
 * Capability to manage dedicated cluster resources for both stateless applications and stateful workloads
 
+## Agenda
++ Introduction / IBM Cloud Private
 
-#  Lab overview
+[Lab 0](https://github.com/dymaczew/ContainerWkshp/tree/master/Lab%200) (Optional): Provides a walkthrough for installing IBM Cloud command-line tools and the Kubernetes CLI. You can skip this lab if you have the IBM Cloud CLI, the container-service plugin, the containers-registry plugin, and the kubectl CLI already installed on your machine.
 
++ _Docker Overview and **Lab**_
+  + [https://github.com/dymaczew/ContainerWkshp/blob/master/2-DockerLab.md](https://github.com/dymaczew/ContainerWkshp/blob/master/2-DockerLab.md)
++ Kubernetes overview
++ IBM Cloud Private Overview
+  +   _Demo_
++ Helm overview
+  + _Kubernetes & Helm **Lab** on ICP_
+
+  + [https://github.com/dymaczew/ContainerWkshp/blob/master/4-KubernetesHelmOnICP.md](https://github.com/dymaczew/ContainerWkshp/blob/master/4-KubernetesHelmOnICP.md)
 
 [Lab 1](https://github.com/dymaczew/ContainerWkshp/tree/master/Lab%201): This lab walks through creating and deploying a simple "hello world" app in Node.JS, then accessing that app.
 
 [Lab 2](https://github.com/dymaczew/ContainerWkshp/tree/master/Lab%202): Builds on lab 1 to expand to a more resilient setup which can survive having containers fail and recover. Lab 2 will also walk through basic services you need to get started with Kubernetes and the IBM Cloud Private
 
-[Lab 3] Not yet ready(https://github.com/dymaczew/ContainerWkshp/tree/master/Lab%205): This lab walks through securing your cluster and applications using network policies, and will later add leveraging tools like Vulnerability Advisor to secure images and manage security in your image registry.
+[Lab 3] Not yet ready(https://github.com/dymaczew/ContainerWkshp/tree/master/Lab%203): This lab walks through securing your cluster and applications using network policies, and will later add leveraging tools like Vulnerability Advisor to secure images and manage security in your image registry.
 
-
-## Agenda
-+ Introduction / IBM Cloud
-
-[Lab 0](https://github.com/dymaczew/ContainerWkshp/tree/master/Lab%200) (Optional): Provides a walkthrough for installing IBM Cloud command-line tools and the Kubernetes CLI. You can skip this lab if you have the IBM Cloud CLI, the container-service plugin, the containers-registry plugin, and the kubectl CLI already installed on your machine.
-
-+ _Docker Overview and **Lab**_
-  + [https://github.com/dymaczew/ContainerWkshp/blob/master/1-PrepareLab.md](https://github.com/dymaczew/ContainerWkshp/blob/master/1-PrepareLab.md)
-  + [https://github.com/dymaczew/ContainerWkshp/blob/master/2-DockerLab.md](https://github.com/dymaczew/ContainerWkshp/blob/master/2-DockerLab.md)
-+ Kubernetes overview
-+ Positioning and Offerings
-    + ICp / Icp Hosted / IKS / CAC (MultiCloud)
-+ IBM Cloud (Public) Container Service
-+ _Kubernetes **Lab** on IKS_
-  + [https://github.com/dymaczew/ContainerWkshp/blob/master/3-KubernetesLabOnIKS.md](https://github.com/dymaczew/ContainerWkshp/blob/master/3-KubernetesLabOnIKS.md)
-+ IBM Cloud Private Overview
-  +   _Demo_
-+ Wrap Up
-
-**Day Two**
-+ Helm overview
-  + _Kubernetes & Helm **Lab** on ICP_
-
-  + [https://github.com/dymaczew/ContainerWkshp/blob/master/4-KubernetesHelmOnICP.md](https://github.com/dymaczew/ContainerWkshp/blob/master/4-KubernetesHelmOnICP.md)
 
   + <https://github.com/dymaczew/ContainerWkshp/blob/master/5-HybridCloudLab.md>
 
