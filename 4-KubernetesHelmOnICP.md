@@ -1032,15 +1032,13 @@ Login Succeeded
 
 ### 2. Create an empty chart directory
 
-`cd`
+
 
 `helm create hellonginx`
 
 `cd hellonginx`
 
-`apt install tree`
 
-`tree .`
 
 
 ![create tree](./images/treehelm.png)
@@ -1055,75 +1053,33 @@ Look at **values.yaml** and **modify it**.
 
 `nano values.yaml`
 
-Replace the **service section** and choose a port (like 30073 for instance) with the following code:
+Replace the default values with the following code:
 
 ```console
- service:
-  name: hellonginx-service
-  type: NodePort
-  externalPort: 80
-  internalPort: 80
-  nodePort: 30073
-```
-
-The main content for **values.yaml** is as follows:
-
-```
-# Default values for hellonginx.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-replicaCount: 1
-
 image:
-  repository: nginx
-  tag: stable
+  repository: mycluster.icp:8500/default/nginx
+  tag: latest
   pullPolicy: IfNotPresent
 
 service:
-  name: hellonginx-service
-  type: NodePort
-  externalPort: 80  
-  internalPort: 80  
-  nodePort: 30073
+  type: ClusterIP
+  port: 80
 
 ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  path: /
+  enabled: true
+  annotations: {
+     ingress.kubernetes.io/rewrite-target: "/",
+     nginx.ingress.kubernetes.io/rewrite-target: "/"
+    }
+    path: /
   hosts:
     - chart-example.local
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #  cpu: 100m
-  #  memory: 128Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
 ```
-
 
 
 Review deployment template:
 
-`more /root/hellonginx/templates/deployment.yaml`
+`more templates/deployment.yaml`
 
 **Don't change anything.**
 
@@ -1182,16 +1138,8 @@ spec:
 ```
 
 Then review the **service template**:
-`nano /root/hellonginx/templates/service.yaml`
+`nano templates/service.yaml`
 
-Change the **-port section** with the following code (don't introduce any TAB in the file):
-
-        - port: {{ .Values.service.externalPort }}
-          targetPort: {{ .Values.service.internalPort }}
-          protocol: TCP
-          nodePort: {{ .Values.service.nodePort }}
-          name: {{ .Values.service.name }}
-So the service should look as follows:
 
 ```
 apiVersion: v1
@@ -1215,6 +1163,51 @@ spec:
     app: {{ template "hellonginx.name" . }}
     release: {{ .Release.Name }}
 ```
+Then edit the **ingress temnplate**:
+
+`nano templates/ingress.yaml`
+
+It should contain the following content
+
+```
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "hellonginx.fullname" . -}}
+{{- $servicePort := .Values.service.port -}}
+{{- $ingressPath := .Values.ingress.path -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ template "hellonginx.name" . }}
+    chart: {{ template "hellonginx.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+{{- with .Values.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+{{- if .Values.ingress.tls }}
+  tls:
+  {{- range .Values.ingress.tls }}
+    - hosts:
+      {{- range .hosts }}
+        - {{ . }}
+      {{- end }}
+      secretName: {{ .secretName }}
+  {{- end }}
+{{- end }}
+  rules:
+    - http:
+        paths:
+        - backend:
+            serviceName: {{ $fullName }}
+            servicePort: http
+          path: {{ $ingressPath }}
+{{- end }}
+```
+
 
 ### 3. Check the chart
 
@@ -1238,79 +1231,59 @@ In case of error, you can :
 
 The helm chart that we created in the previous section that has been verified now can be deployed.
 
-### 1. Create a new namespace
 
-You can use the command line to create a new namespace or you can use the IBM Cloud Private Console to do so:
-- Open a  Web browser from the application launcher
-- Go to `https://<<ipaddress>>:8443/`
-- Login as `admin` with the password of `admin1!`
-- Go to **Menu > Manage**
-
-- Select __Namespaces__ then click __Create namespace__
-
-
-![Organization menu](images/namespaces.png)
-
-  - Specify the namespace of `training` , select `ibm-anyuid-psp` as Pod Security Policy and click __Create__
-
-    ![1553684355637](images/1553684355637.png)
-
-    Pod Security Policies enable fine-grained authorization of pod creation and updates. The `PodSecurityPolicy` objects define a set of conditions that a pod must run with in order to be accepted into the system, as well as defaults for the related fields. It is define at cluster level, but can be applied globally or to a specified namespace. 
-
-    In our case, we will allow any user (including root) to run an application in a container. By default, it is restricted to non-root users.
-
-    
-
-
-### 2. Install the chart to the training namespace
+### 2. Install the chart to the default namespace
 
 Type the following command and don't forget the dot at the end:
 
-`helm install --name hellonginx --namespace training --tls .`
+`helm install --name hellonginx --namespace default --tls .`
 
 Results:
 ```console
-# helm install --name hellonginx --namespace training --tls .
+# helm install --name hellonginx --namespace default --tls .
 NAME:   hellonginx
-LAST DEPLOYED: Thu Apr 19 23:49:47 2018
-NAMESPACE: training
+LAST DEPLOYED: Fri Apr 26 16:29:05 2019
+NAMESPACE: default
 STATUS: DEPLOYED
 
 RESOURCES:
 ==> v1beta2/Deployment
-NAME        DESIRED  CURRENT  UP-TO-DATE  AVAILABLE  AGE
-hellonginx  1        1        1           0          0s
+NAME               DESIRED  CURRENT  UP-TO-DATE  AVAILABLE  AGE
+wlodek-hellonginx  1        1        1           0          1s
+
+==> v1beta1/Ingress
+NAME               HOSTS  ADDRESS  PORTS  AGE
+wlodek-hellonginx  *      80       1s
 
 ==> v1/Service
-NAME        TYPE      CLUSTER-IP  EXTERNAL-IP  PORT(S)       AGE
-hellonginx  NodePort  10.0.0.131  <none>       80:30073/TCP  0s
+NAME               TYPE       CLUSTER-IP  EXTERNAL-IP  PORT(S)  AGE
+wlodek-hellonginx  ClusterIP  10.0.0.14   <none>       80/TCP   1s
 
 
 NOTES:
 1. Get the application URL by running these commands:
-  export NODE_PORT=$(kubectl get --namespace training -o jsonpath="{.spec.ports[0].nodePort}" services hellonginx)
-  export NODE_IP=$(kubectl get nodes --namespace training -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo http://$NODE_IP:$NODE_PORT
+  export PROXY_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:/hellonginx
 ```
 
 
 
-As you can see, we installed 2 Kubernetes resources : a deployment and a service.
+As you can see, we installed 3 Kubernetes resources : a deployment, a service and an ingress.
 
-Check the pods are running in the training namespace:
+Check the pods are running in the default namespace:
 
-`kubectl get pods -n training`
+`kubectl get pods -n default`
 
 Results:
 
 ```
-# kubectl get pods -n training
+# kubectl get pods -n default
 NAME                          READY     STATUS    RESTARTS   AGE
 hellonginx-798f6d7885-vqdv4   1/1       Running   0          5m
 ```
 
 You should use the following  url:
-`http://ipaddress:30073`
+`http://$PROXY_IP/hellonginx`
 
 Try this url and get the nginx hello:
 
@@ -1319,33 +1292,33 @@ Try this url and get the nginx hello:
 
 ### 3. List the releases
 
-` helm list hellonginx --tls --namespace training`
+` helm list hellonginx --namespace default --tls`
 
 Results:
 
 ```console
-# helm list hellonginx --tls --namespace training
+# helm list hellonginx --tls --namespace default
 NAME      	REVISION	UPDATED                 	STATUS  	CHART           	NAMESPACE
-hellonginx	1       	Mon Oct  8 20:54:37 2018	DEPLOYED	hellonginx-0.1.0	training 
+hellonginx	1       	Mon Oct  8 20:54:37 2018	DEPLOYED	hellonginx-0.1.0	default 
 ```
 
 
 ### 4. List the deployments
 
-`kubectl get deployments --namespace=training`
+`kubectl get deployments --namespace=default`
 
 ```console
-# kubectl get deployments --namespace=training
+# kubectl get deployments --namespace=default
 NAME         DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 hellonginx   1         1         1            1           9m
 ```
 
 ### 5. List the services
 
-`kubectl get services --namespace=training`
+`kubectl get services --namespace=default`
 
 ```console
-# kubectl get services --namespace=training
+# kubectl get services --namespace=default
 NAME         TYPE       CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
 hellonginx   NodePort   10.0.0.131   <none>        80:30073/TCP   10m
 ```
@@ -1354,12 +1327,12 @@ Locate the line port 80:300073.
 
 ### 6. List the pods
 
-`kubectl get pods --namespace=training`
+`kubectl get pods --namespace=default`
 
 **Results**
 
 ```console
-root:[hellonginx]: kubectl get pods --namespace=training
+root:[hellonginx]: kubectl get pods --namespace=default
 NAME                          READY     STATUS    RESTARTS   AGE
 hellonginx-6bcd9f4578-zqt6r   1/1       Running   0          11m
 ```
@@ -1380,7 +1353,7 @@ Change the replicas to 3 and then upgrade hellonginx:
 root:[hellonginx]: helm  upgrade hellonginx . --tls
 Release "hellonginx" has been upgraded. Happy Helming!
 LAST DEPLOYED: Fri Apr 20 00:06:55 2018
-NAMESPACE: training
+NAMESPACE: default
 STATUS: DEPLOYED
 
 RESOURCES:
@@ -1395,8 +1368,8 @@ hellonginx  3        3        3           1          17m
 
 NOTES:
 1. Get the application URL by running these commands:
-  export NODE_PORT=$(kubectl get --namespace training -o jsonpath="{.spec.ports[0].nodePort}" services hellonginx)
-  export NODE_IP=$(kubectl get nodes --namespace training -o jsonpath="{.items[0].status.addresses[0].address}")
+  export NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services hellonginx)
+  export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")
   echo http://$NODE_IP:$NODE_PORT
 ```
 
@@ -1414,19 +1387,19 @@ Results:
 
 ```
 # helm package hellonginx
-Successfully packaged chart and saved it to: /root/hellonginx-0.1.0.tgz
+Successfully packaged chart and saved it to: hellonginx-0.1.0.tgz
 ```
 
 **Login** to the master:
 `cloudctl login -a https://mycluster.icp:8443 --skip-ssl-validation`
 
-Then, use the **cloudctl catalog**command to load the chart:
-`cloudctl catalog load-helm-chart --archive /root/hellonginx-0.1.0.tgz`
+Then, use the **bx pr load-helm-chart**command to load the chart:
+`bx pr load-helm-chart --archive hellonginx-0.1.0.tgz`
 
 Results:
 
 ``` 
-# cloudctl catalog load-helm-chart --archive /root/hellonginx-0.1.0.tgz
+# bx pr load-helm-chart --archive hellonginx-0.1.0.tgz
 Loading helm chart
 Loaded helm chart
 
@@ -1453,7 +1426,7 @@ Leave the terminal and login to the ICP console :
 ![hello chart](images/hellonginx4.png)
 
 Click on Parameters at the bottom of the first page. 
-Find and change the **release name**, the **namspace** and the **nodeport** (for example 30075)
+Find and change the **release name**, the **namspace** and the **ingress path** (for example /hellonginx2)
 
 Click **Install** to see the results.
 
