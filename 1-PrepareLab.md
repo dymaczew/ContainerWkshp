@@ -8,119 +8,10 @@
 
 
 
-Before you can run all the labs about containers in IBM Cloud, you should prepare your environment to execute those labs. Check the following instructions.
+Before you can run all the labs about containers in IBM Cloud Private, you should prepare your environment to execute those labs. Check the following instructions [Lab 0](Lab%200/README.md)
 
 
-# Task 1. IBM Cloud registration
-
-Labs are running on the **IBM Cloud** (ex Bluemix).
-
-So before you can start any labs, you should have satisfied the following prerequisites :
-- [ ] You should have **1 valid email** 
-
-- [ ] Sign up to the **IBM Cloud** 
-
-
-**If you already have a IBM id, jump to task 2.**
-
-> If you don't have a valid email address or you don't want to use your personal or professional email address, then you can use https://temp-mail.org/en/
-
-This web site will give you a temporary email address for 10 minutes :
-
-![image-20190118103132743](images/image-20190118103132743-7803892.png)
-
-From that screen,  you can use this temporaty email address (cugebezaza@utooemail.com for example) for the time to register to the IBM Cloud. 
-
-### Sign in to IBM Cloud
-If you don't have already registered to **IBM Cloud**,  
-Open this link  [IBM Cloud](https://cloud.ibm.com/) or type https://cloud.ibm.com/ in your favorite internet browser.
-
-
-![image-20190118101459166](images/image-20190118101459166-7802899.png)
-
-### Fill in the form
-Specify last name, first name, country, phone number and password.
-> By **default**, all new people that register to IBM Cloud will have an **Lite Account** with **no time restriction**. This is not a 30 day trial account. 
-
-Click on **Create Account** button.
-
-![image-20190118103712268](images/image-20190118103712268-7804232.png) 
-
-
-Then if everything is fine, you will receive the following page:
-
-![Thanks](./images/a003.png)
-
-
-### Confirm your registration to IBM Cloud from your inbox
-From your email application , you should have received an email from the IBM Cloud:
-
-![image-20190118103917487](images/image-20190118103917487-7804357.png)
-
-Click on the link to confirm the account:
-
-![image-20190118104115473](images/image-20190118104115473-7804475.png)
-
-Log in to IBM Cloud with your credentials :
-
-![Success Sign up](./images/a005.png)
-
-Then type your password and click **Continue**
-
-![image-20190118104305743](images/image-20190118104305743-7804585.png)
-
-Type your password and click Login button:
-
-![image-20190118104419179](images/image-20190118104419179-7804659.png)
-
-You should see the following **Dashboard**:
-
-![image-20190118104520085](images/image-20190118104520085-7804720.png)
-
-You are now connected (and registred) to the IBM Cloud.
-
-> IMPORTANT : Take a note of your email address and your password.
-
-
-# Task 2. Apply a promo code (if necessary)
-
-Check if you can access to **Containers in Kubernetes Clusters**.
-To do so, click on **Catalog** and click on **Containers** on the left pane of the page :
-
-
-![Showing Containers](./images/showcontainers.png)
-
-> **IMPORTANT** : If you just see **Container Registry** and not the Containers in Kubernetes Clusters, then **you will need a promo code !!!**
-
-> **IMPORTANT** : If you don't have a **promo code**, then ask IBM during the workshop. You can continue the other steps of this preparation and come back later to this step. However, to create a cluster, you will need a promo code.
-
-To install a promo code, follow the procedure : 
-
-Go to **Manage >Account > Account Settings** and press enter.
-
-
-![image-20190118112618467](images/image-20190118112618467-7807178.png)
-
-You should get the following section in the **account setting page**  :
-
-![image-20190118112743476](images/image-20190118112743476-7807263.png)
-
-Click **Apply Code** button.
-
-
-![image-20190118112849245](images/image-20190118112849245-7807329.png)
-
-Enter your **promo code** and click **Apply** 
-
-![Apply Promo Code](./images/applypromo2.png)
-
-> Close this window and **logout / login** to your account.
-
-Go back to the **Catalog** and check that now you have access to **Containers in Kubernetes Clusters** and the Container Registry.
-
-![Kubernetes](./images/kcheck.png)
-
-# Task 3. Install Docker Desktop on your Mac
+# Task 1. Install Docker Desktop on your Mac
 
 Follow this procedure to install the latest Docker Desktop (ex Community Edition) on your Mac (**for Windows**, jump to the next session) 
 
@@ -172,7 +63,7 @@ Server: Docker Engine - Community
 > The Docker server contains the **Docker engine**(containerd) that controls running containers. 
 
 
-# Task 4. Install Docker Desktop on Windows
+# Task 2. Install Docker Desktop on Windows
 
 Follow this procedure to install the latest Docker Desktop (ex Community Edition) on Windows (for Mac, jump to the previous session) 
 
@@ -400,103 +291,9 @@ container-service/kubernetes-service   0.1.581
 ...
 ```
 
-> You should get at least these 2 plugins installed : **container-registry** and **container-service/kubernetes-service**
 
 
 
-
-
-# Task 7. Login to IBM Cloud
-
-For these labs, we have decided to login to the **London Data Center** (api.eu-gb.bluemix.net). 
-
-Login to IBM Cloud with the ibmcloud command :
-
- `ibmcloud login -a api.eu-gb.bluemix.net`
-
- And answer a few questions: email, password :
-
-```console
-> ibmcloud login -a api.eu-gb.bluemix.net
-API endpoint: api.eu-gb.bluemix.net
-
-Email> cugebezaza@utooemail.com
-
-Password> 
-Authenticating...
-Credentials were rejected.
-Code: BXNIM0602E, message: The credentials you entered for the user 'cugebezaza@utooemail.com' are incorrect
-
-Password> 
-Authenticating...
-OK
-
-Targeted account Philippe Smith's Account (828b1270b40247a897d94167c14051bc)
-
-Targeted resource group Default
-
-                      
-API endpoint:      https://api.eu-gb.bluemix.net   
-Region:            eu-gb   
-User:              cugebezaza@utooemail.com   
-Account:           Philippe Smith's Account (828b1270b40247a897d94167c14051bc)   
-Resource group:    Default   
-CF API endpoint:      
-Org:                  
-Space:                
-
-Tip: If you are managing Cloud Foundry applications and services
-- Use 'ibmcloud target --cf' to target Cloud Foundry org/space interactively, or use 'ibmcloud target --cf-api ENDPOINT -o ORG -s SPACE' to target the org/space.
-- Use 'ibmcloud cf' if you want to run the Cloud Foundry CLI with current IBM Cloud CLI context.
-
-```
-
-
-
-And optionally, you can also specify the following ORG and SPACE with that command :
-
-`ibmcloud target -o cugebezaza@utooemail.com -s dev`
-
-or 
-
-`ibmcloud target --cf`
-
-Results:
-
- ```console 
-> ibmcloud target -o cugebezaza@utooemail.com -s dev
-Targeted Cloud Foundry (https://api.eu-gb.bluemix.net)
-
-Targeted org cugebezaza@utooemail.com
-
-Targeted space dev
-                      
-API endpoint:      https://api.eu-gb.bluemix.net   
-Region:            eu-gb   
-User:              cugebezaza@utooemail.com   
-Account:           Philippe Smith's Account (828b1270b40247a897d94167c14051bc)   
-Resource group:    Default   
-CF API endpoint:   https://api.eu-gb.bluemix.net (API version: 2.106.0)   
-Org:               cugebezaza@utooemail.com   
-Space:             dev   
-
- ```
-
-
-
-
-# Task 8. Conclusion
-
-###  Results
-<span style="background-color:yellow;">Successful exercise ! </span>
-You finally went thru the following features :
-- [x] You registered to IBM Cloud
-- [x] You applied a promo code
-- [x] You installed Docker on your laptop
-- [x] You installed Git
-- [x] You installed the ibmcloud commands
-- [x] You login to IBM Cloud successfully
-- [x] You are ready for the labs
 ---
 # End of the lab
 ---
